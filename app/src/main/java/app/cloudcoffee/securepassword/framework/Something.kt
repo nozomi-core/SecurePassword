@@ -84,6 +84,10 @@ sealed class Something<out T> {
             return Failed.create(code, throwable)
         }
 
+        fun fail(code: FailureCode, message: String): Something<Nothing> {
+            return Failed.create(code, Error(message))
+        }
+
         fun fail(code: FailureCode): Something<Nothing>  {
             return Failed.create(code, null)
         }
