@@ -7,34 +7,34 @@ sealed class Something<out T> {
                 return if(wrapped != null)
                     Value(wrapped)
                 else
-                    Failed.create(FailCode.NULL_VALUE, null)
+                    Failed.create(FailureCode.NULL_VALUE, null)
             }
         }
     }
-    class Failed private constructor(val code: FailCode, val throwable: Throwable?): Something<Nothing>() {
-        //TODO: handle code and throwable later
+
+    class Failed private constructor(val code: FailureCode, val throwable: Throwable?): Something<Nothing>() {
         companion object {
-            fun create(code: FailCode, throwable: Throwable?): Something<Nothing> {
+            fun create(code: FailureCode, throwable: Throwable?): Something<Nothing> {
                 return Failed(code, throwable)
             }
         }
     }
 
-    fun get(onValue: (myVal: T) -> Unit) {
+    fun onValue(onValue: (myVal: T) -> Unit) {
         when(this) {
             is Value -> onValue(theValue)
             else -> {}
         }
     }
 
-    fun fail(onFail: () -> Unit) {
+    fun onError(onFail: () -> Unit) {
         when(this) {
             is Failed -> onFail()
             else -> {}
         }
     }
 
-    fun failWith(onFail: (code: FailCode, ex: Throwable?) -> Unit) {
+    fun onErrorWith(onFail: (code: FailureCode, ex: Throwable?) -> Unit) {
         when(this) {
             is Failed -> onFail(code, throwable)
             else -> {}
@@ -54,7 +54,7 @@ sealed class Something<out T> {
                 try {
                     wrap(mapper(theValue))
                 } catch (e: Throwable) {
-                    fail(e, FailCode.GENERAL)
+                    fail(e, FailureCode.SOMETHING_MAPPING)
                 }
             }
             is Failed -> this
@@ -63,7 +63,13 @@ sealed class Something<out T> {
 
     fun <R> flatMap(mapper: (T) -> Something<R>): Something<R> {
         return when (this) {
-            is Value -> mapper(theValue)
+            is Value -> {
+                try {
+                    mapper(theValue)
+                } catch (e: Throwable) {
+                    fail(e, FailureCode.SOMETHING_MAPPING)
+                }
+            }
             is Failed -> this
         }
     }
@@ -74,11 +80,11 @@ sealed class Something<out T> {
             return  Value.create(aValue)
         }
 
-        fun fail(throwable: Throwable, code: FailCode): Something<Nothing> {
+        fun fail(throwable: Throwable, code: FailureCode): Something<Nothing> {
             return Failed.create(code, throwable)
         }
 
-        fun fail(code: FailCode): Something<Nothing>  {
+        fun fail(code: FailureCode): Something<Nothing>  {
             return Failed.create(code, null)
         }
     }

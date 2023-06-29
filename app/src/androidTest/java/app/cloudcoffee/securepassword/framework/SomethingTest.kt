@@ -48,6 +48,20 @@ class SomethingTest {
         Assert.assertTrue(count is Something.Failed)
     }
 
+    @Test
+    fun testFlatMap() {
+        val myString = getSomething("welcome")
+        val countme = myString.flatMap {
+            Something.wrap(it.length)
+        }
+        Assert.assertTrue(countme is Something.Value)
+    }
+
+    fun getSomething(value: String?): Something<String> {
+        return Something.wrap(value)
+    }
+
+
     fun getCharLength(string: Something<String>): Something<Int> {
         return string.transform {
             it.length

@@ -2,7 +2,7 @@ package app.cloudcoffee.securepassword.security.aes
 
 import android.security.keystore.KeyProperties
 import android.security.keystore.KeyProtection
-import app.cloudcoffee.securepassword.framework.FailCode
+import app.cloudcoffee.securepassword.framework.FailureCode
 import app.cloudcoffee.securepassword.framework.Something
 import java.security.KeyStore
 import java.util.Calendar
@@ -68,7 +68,7 @@ object AesEncryption {
 
             Something.wrap(AesEncryptResult(cipherText))
         } catch (e: Throwable) {
-            Something.fail(e, FailCode.ENCRYPTION_ERROR)
+            Something.fail(e, FailureCode.ENCRYPTION_ERROR)
         }
     }
 
@@ -80,7 +80,7 @@ object AesEncryption {
 
             Something.wrap(AesDecryptResult(cipherText))
         } catch (e: Throwable) {
-            Something.fail(e, FailCode.ENCRYPTION_ERROR)
+            Something.fail(e, FailureCode.ENCRYPTION_ERROR)
         }
     }
 }

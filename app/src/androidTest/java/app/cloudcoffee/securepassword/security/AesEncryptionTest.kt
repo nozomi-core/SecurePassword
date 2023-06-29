@@ -18,7 +18,7 @@ class AesEncryptionTest {
             AesEncryption.decrypt(result.payload).transform {
                 it.toUtf8String()
             }.getOrNull()
-        }.getOrNull()
+        }.getOrNull() ?: ""
 
         Assert.assertEquals("hello encryption", result)
     }
