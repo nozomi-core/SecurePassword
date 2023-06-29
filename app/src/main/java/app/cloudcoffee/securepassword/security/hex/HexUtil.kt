@@ -1,17 +1,17 @@
-package app.cloudcoffee.securepassword.security
+package app.cloudcoffee.securepassword.security.hex
 
 object HexUtil {
 
     private val hexArray = "0123456789abcdef".toCharArray()
 
-    fun toHexString(bytes: ByteArray): String {
+    fun toHexString(bytes: ByteArray): HexString {
         val hexChars = CharArray(bytes.size * 2)
         for (i in bytes.indices) {
             val v = bytes[i].toInt() and 0xFF
             hexChars[i * 2] = hexArray[v.ushr(4)]
             hexChars[i * 2 + 1] = hexArray[v and 0x0F]
         }
-        return String(hexChars)
+        return HexString(String(hexChars))
     }
 
     fun fromHex(hex: String): ByteArray {

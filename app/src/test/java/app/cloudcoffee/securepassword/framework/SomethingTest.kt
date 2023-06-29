@@ -9,8 +9,5 @@ class SomethingTest {
             else -> "39"
         }
 
-        val name = Something.
-        Something.Value(null)
-
     }
 }

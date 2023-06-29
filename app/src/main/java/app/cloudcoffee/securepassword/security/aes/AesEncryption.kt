@@ -1,30 +1,24 @@
-package app.cloudcoffee.securepassword.security
+package app.cloudcoffee.securepassword.security.aes
 
 import android.security.keystore.KeyProperties
 import android.security.keystore.KeyProtection
-import java.io.IOException
-import java.security.InvalidAlgorithmParameterException
+import app.cloudcoffee.securepassword.framework.FailCode
+import app.cloudcoffee.securepassword.framework.Something
 import java.security.KeyStore
-import java.security.KeyStoreException
-import java.security.NoSuchAlgorithmException
-import java.security.NoSuchProviderException
-import java.security.cert.CertificateException
 import java.util.Calendar
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
 import javax.crypto.SecretKey
 import javax.crypto.spec.IvParameterSpec
 
-data class EncryptResult(private val payload: ByteArray)
-
-object Secure {
+object AesEncryption {
     private const val KEYSTORE_PROVIDER_ANDROID_KEYSTORE = "AndroidKeyStore"
     private const val KEY_ALIAS = "MyKeyAlias"
 
     private const val KEY_TYPE = "AES"
     private const val TRANSFORMATION = "AES/CBC/PKCS7PADDING"
 
-    private val initialVector = byteArrayOf(0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00)
+    private val initialVector = byteArrayOf(0x00 ,0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00)
 
     fun generateOrGetKey(): SecretKey? {
         try {
@@ -62,22 +56,32 @@ object Secure {
         return null
     }
 
-    fun encrypt(bytesToEncode: ByteArray): String {
-        val cipher = Cipher.getInstance(TRANSFORMATION)
-        cipher.init(Cipher.ENCRYPT_MODE, generateOrGetKey(), IvParameterSpec(initialVector))
-        val cipherText = cipher.doFinal(bytesToEncode)
-
-        return HexUtil.toHexString(cipherText)
+    fun encryptUtf8(stringToEncrypt: String): Something<AesEncryptResult> {
+        return encrypt(stringToEncrypt.toByteArray(Charsets.UTF_8))
     }
 
-    fun decrypt(hexCipherText: String): ByteArray {
-        val bytes = HexUtil.fromHex(hexCipherText)
+    fun encrypt(bytesToEncode: ByteArray): Something<AesEncryptResult> {
+        return try {
+            val cipher = Cipher.getInstance(TRANSFORMATION)
+            cipher.init(Cipher.ENCRYPT_MODE, generateOrGetKey(), IvParameterSpec(initialVector))
+            val cipherText = cipher.doFinal(bytesToEncode)
 
-        val cipher = Cipher.getInstance(TRANSFORMATION)
-        cipher.init(Cipher.DECRYPT_MODE, generateOrGetKey(), IvParameterSpec(initialVector))
-        val cipherText = cipher.doFinal(bytes)
+            Something.wrap(AesEncryptResult(cipherText))
+        } catch (e: Throwable) {
+            Something.fail(e, FailCode.ENCRYPTION_ERROR)
+        }
+    }
 
-        return cipherText
+    fun decrypt(bytes: ByteArray): Something<AesDecryptResult> {
+        return try {
+            val cipher = Cipher.getInstance(TRANSFORMATION)
+            cipher.init(Cipher.DECRYPT_MODE, generateOrGetKey(), IvParameterSpec(initialVector))
+            val cipherText = cipher.doFinal(bytes)
+
+            Something.wrap(AesDecryptResult(cipherText))
+        } catch (e: Throwable) {
+            Something.fail(e, FailCode.ENCRYPTION_ERROR)
+        }
     }
 }
 
