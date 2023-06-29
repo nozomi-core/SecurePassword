@@ -61,6 +61,13 @@ sealed class Something<out T> {
         }
     }
 
+    fun <R> flatMap(mapper: (T) -> Something<R>): Something<R> {
+        return when (this) {
+            is Value -> mapper(theValue)
+            is Failed -> this
+        }
+    }
+
     companion object {
 
         fun <T> wrap (aValue: T?): Something<T> {
