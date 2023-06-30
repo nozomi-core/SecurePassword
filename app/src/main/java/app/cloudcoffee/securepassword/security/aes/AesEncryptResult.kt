@@ -1,7 +1,7 @@
 package app.cloudcoffee.securepassword.security.aes
 
-import app.cloudcoffee.securepassword.security.hex.HexString
-import app.cloudcoffee.securepassword.security.hex.HexUtil
+import app.cloudcoffee.securepassword.helper.hex.HexString
+import app.cloudcoffee.securepassword.helper.hex.HexUtil
 
 data class AesEncryptResult(val payload: ByteArray) {
 

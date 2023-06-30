@@ -1,6 +1,6 @@
 package app.cloudcoffee.securepassword.security
 
-import app.cloudcoffee.securepassword.security.hex.HexUtil
+import app.cloudcoffee.securepassword.helper.hex.HexUtil
 import org.junit.Assert
 import org.junit.Test
 

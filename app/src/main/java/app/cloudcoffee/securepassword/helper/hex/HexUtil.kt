@@ -1,4 +1,4 @@
-package app.cloudcoffee.securepassword.security.hex
+package app.cloudcoffee.securepassword.helper.hex
 
 object HexUtil {
 
