@@ -7,7 +7,6 @@ class PasswordApplication: Application() {
 
     override fun onCreate() {
         super.onCreate()
-        val app = FirebaseApp.initializeApp(this)
-        val name = app?.name
+        FirebaseApp.initializeApp(this)
     }
 }
