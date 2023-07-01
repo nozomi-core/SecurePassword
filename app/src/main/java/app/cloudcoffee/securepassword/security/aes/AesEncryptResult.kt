@@ -1,12 +1,27 @@
 package app.cloudcoffee.securepassword.security.aes
 
+import app.cloudcoffee.securepassword.helper.b64.Base64String
+import app.cloudcoffee.securepassword.helper.b64.Base64Util
 import app.cloudcoffee.securepassword.helper.hex.HexString
 import app.cloudcoffee.securepassword.helper.hex.HexUtil
+import javax.crypto.spec.IvParameterSpec
 
-data class AesEncryptResult(val payload: ByteArray) {
+data class AesEncryptResult(val payload: ByteArray, val ivParameterSpec: IvParameterSpec) {
 
-    fun toHexString(): HexString {
+    fun payloadToHex(): HexString {
         return HexUtil.toHexString(payload)
+    }
+
+    fun payloadToBase64(): Base64String {
+        return Base64Util.encode(payload)
+    }
+
+    fun ivToHex(): HexString {
+        return HexUtil.toHexString(ivParameterSpec.iv)
+    }
+
+    fun ivToBase64(): Base64String {
+        return Base64Util.encode(ivParameterSpec.iv)
     }
 
     override fun equals(other: Any?): Boolean {
