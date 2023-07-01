@@ -2,7 +2,12 @@ package app.cloudcoffee.securepassword.helper.b64
 
 import android.util.Base64
 
-data class Base64String(val encoded: String)
+data class Base64String(val encoded: String) {
+
+    fun decode(): ByteArray {
+        return Base64Util.decode(this)
+    }
+}
 
 object Base64Util {
 
