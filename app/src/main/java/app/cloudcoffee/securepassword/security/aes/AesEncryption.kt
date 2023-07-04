@@ -3,7 +3,7 @@ package app.cloudcoffee.securepassword.security.aes
 import android.security.keystore.KeyProperties
 import android.security.keystore.KeyProtection
 import app.cloudcoffee.securepassword.framework.FailureCode
-import app.cloudcoffee.securepassword.framework.Something
+import app.cloudcoffee.securepassword.framework.Maybe
 import java.security.KeyStore
 import java.security.SecureRandom
 import java.util.Calendar
@@ -56,11 +56,11 @@ object AesEncryption {
         return null
     }
 
-    fun encryptUtf8(stringToEncrypt: String): Something<AesEncryptResult> {
+    fun encryptUtf8(stringToEncrypt: String): Maybe<AesEncryptResult> {
         return encrypt(stringToEncrypt.toByteArray(Charsets.UTF_8))
     }
 
-    fun encrypt(bytesToEncode: ByteArray): Something<AesEncryptResult> {
+    fun encrypt(bytesToEncode: ByteArray): Maybe<AesEncryptResult> {
         return try {
             val strongIvBytes = ByteArray(IV_SIZE)
             SecureRandom.getInstanceStrong().nextBytes(strongIvBytes)
@@ -69,21 +69,21 @@ object AesEncryption {
             cipher.init(Cipher.ENCRYPT_MODE, generateOrGetKey(), strongIv)
             val cipherText = cipher.doFinal(bytesToEncode)
 
-            Something.wrap(AesEncryptResult(cipherText, strongIv))
+            Maybe.value(AesEncryptResult(cipherText, strongIv))
         } catch (e: Throwable) {
-            Something.fail(e, FailureCode.ENCRYPTION_ERROR)
+            Maybe.fail(e, FailureCode.ENCRYPTION_ERROR)
         }
     }
 
-    fun decrypt(bytes: ByteArray, ivParameterSpec: IvParameterSpec): Something<AesDecryptResult> {
+    fun decrypt(bytes: ByteArray, ivParameterSpec: IvParameterSpec): Maybe<AesDecryptResult> {
         return try {
             val cipher = Cipher.getInstance(TRANSFORMATION)
             cipher.init(Cipher.DECRYPT_MODE, generateOrGetKey(), ivParameterSpec)
             val cipherText = cipher.doFinal(bytes)
 
-            Something.wrap(AesDecryptResult(cipherText))
+            Maybe.value(AesDecryptResult(cipherText))
         } catch (e: Throwable) {
-            Something.fail(e, FailureCode.ENCRYPTION_ERROR)
+            Maybe.fail(e, FailureCode.ENCRYPTION_ERROR)
         }
     }
 }

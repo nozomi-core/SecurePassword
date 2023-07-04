@@ -1,9 +1,9 @@
 package app.cloudcoffee.securepassword.framework
 
-sealed class Something<out T> {
-    class Value<out T> private constructor(val theValue: T): Something<T>() {
+sealed class Maybe<out T> {
+    class Value<out T> private constructor(val theValue: T): Maybe<T>() {
         companion object {
-            fun <T> create(wrapped: T?): Something<T> {
+            fun <T> create(wrapped: T?): Maybe<T> {
                 return if(wrapped != null)
                     Value(wrapped)
                 else
@@ -12,19 +12,20 @@ sealed class Something<out T> {
         }
     }
 
-    class Failed private constructor(val code: FailureCode, val throwable: Throwable?): Something<Nothing>() {
+    class Failed private constructor(val code: FailureCode, val throwable: Throwable?): Maybe<Nothing>() {
         companion object {
-            fun create(code: FailureCode, throwable: Throwable?): Something<Nothing> {
+            fun create(code: FailureCode, throwable: Throwable?): Maybe<Nothing> {
                 return Failed(code, throwable)
             }
         }
     }
 
-    fun onValue(onValue: (myVal: T) -> Unit) {
+    fun onValue(onValue: (myVal: T) -> Unit): Maybe<T> {
         when(this) {
             is Value -> onValue(theValue)
             else -> {}
         }
+        return this
     }
 
     fun onError(onFail: () -> Unit) {
@@ -48,11 +49,11 @@ sealed class Something<out T> {
         }
     }
 
-    fun <R> transform(mapper: (myVal: T) -> R): Something<R> {
+    fun <R> transform(mapper: (myVal: T) -> R): Maybe<R> {
         return when(this) {
             is Value -> {
                 try {
-                    wrap(mapper(theValue))
+                    value(mapper(theValue))
                 } catch (e: Throwable) {
                     fail(e, FailureCode.SOMETHING_MAPPING)
                 }
@@ -61,7 +62,7 @@ sealed class Something<out T> {
         }
     }
 
-    fun <R> flatMap(mapper: (T) -> Something<R>): Something<R> {
+    fun <R> then(mapper: (T) -> Maybe<R>): Maybe<R> {
         return when (this) {
             is Value -> {
                 try {
@@ -76,19 +77,19 @@ sealed class Something<out T> {
 
     companion object {
 
-        fun <T> wrap (aValue: T?): Something<T> {
+        fun <T> value (aValue: T?): Maybe<T> {
             return  Value.create(aValue)
         }
 
-        fun fail(throwable: Throwable, code: FailureCode): Something<Nothing> {
+        fun fail(throwable: Throwable, code: FailureCode): Maybe<Nothing> {
             return Failed.create(code, throwable)
         }
 
-        fun fail(code: FailureCode, message: String): Something<Nothing> {
+        fun fail(code: FailureCode, message: String): Maybe<Nothing> {
             return Failed.create(code, Error(message))
         }
 
-        fun fail(code: FailureCode): Something<Nothing>  {
+        fun fail(code: FailureCode): Maybe<Nothing>  {
             return Failed.create(code, null)
         }
     }
