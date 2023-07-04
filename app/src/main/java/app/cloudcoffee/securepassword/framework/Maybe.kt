@@ -7,7 +7,15 @@ sealed class Maybe<out T> {
                 return if(wrapped != null)
                     Value(wrapped)
                 else
-                    Failed.create(FailureCode.NULL_VALUE, null)
+                    Null.create()
+            }
+        }
+    }
+
+    class Null private constructor(): Maybe<Nothing>() {
+        companion object {
+            fun create(): Maybe<Nothing> {
+                return Null()
             }
         }
     }
@@ -59,6 +67,7 @@ sealed class Maybe<out T> {
                 }
             }
             is Failed -> this
+            is Null -> this
         }
     }
 
@@ -72,6 +81,7 @@ sealed class Maybe<out T> {
                 }
             }
             is Failed -> this
+            is Null -> this
         }
     }
 
