@@ -13,6 +13,7 @@ class AesEncryptionTest {
 
     @Test
     fun encryptSameMessage() {
+        val iv = AesEncryption.getNextStrongIv()
         val cipherTextRed = AesEncryption.encryptUtf8("hello-world").transform {
             it.payloadToHex().encodedHex
         }.getOrNull()
@@ -38,6 +39,7 @@ class AesEncryptionTest {
 
     @Test
     fun encryptDecryptResultv2() {
+        val iv = AesEncryption.getNextStrongIv()
         val result = AesEncryption.encryptUtf8("hello encryption").then { encryptResult ->
             AesEncryption.decrypt(encryptResult.payload, encryptResult.ivParameterSpec).then { decryptResult ->
                 finalTransform(decryptResult).then {

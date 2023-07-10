@@ -4,11 +4,14 @@ import app.cloudcoffee.securepassword._env.testSignal
 import app.cloudcoffee.securepassword.client.DatabaseClient
 import app.cloudcoffee.securepassword.client.FirebaseDatabaseClient
 import app.cloudcoffee.securepassword.client.ObjectCollection
+import app.cloudcoffee.securepassword.client.data.password.UnencryptedPassword
 import app.cloudcoffee.securepassword.framework.FailureCode
 import app.cloudcoffee.securepassword.framework.Maybe
+import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.JUnit4
+import java.util.UUID
 
 @JvmInline
 value class Email private constructor(val it: String) {
@@ -61,5 +64,19 @@ class FirebaseExample {
                 signal.exception(Error())
             }
         }
+    }
+
+    @Test
+    fun testEncrupt() {
+
+        val usernameStr = "${UUID.randomUUID()}"
+
+        val word = UnencryptedPassword.of(username = usernameStr)
+
+        val original = word.encrypt().decrypt()
+        Assert.assertEquals(original.username.it, "-1")
+
+
+
     }
 }

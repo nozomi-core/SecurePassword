@@ -1,4 +1,4 @@
-package app.cloudcoffee.securepassword
+package app.cloudcoffee.securepassword._example
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -10,9 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.lifecycleScope
-import app.cloudcoffee.securepassword.ui.theme.SecurePasswordTheme
-import kotlinx.coroutines.launch
+import app.cloudcoffee.securepassword._example.theme.SecurePasswordTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

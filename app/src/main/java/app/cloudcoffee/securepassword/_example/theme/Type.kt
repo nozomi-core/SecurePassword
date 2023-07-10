@@ -1,4 +1,4 @@
-package app.cloudcoffee.securepassword.ui.theme
+package app.cloudcoffee.securepassword._example.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

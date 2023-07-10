@@ -8,6 +8,10 @@ import javax.crypto.spec.IvParameterSpec
 
 data class AesEncryptResult(val payload: ByteArray, val ivParameterSpec: IvParameterSpec) {
 
+    fun decrypt(): AesDecryptResult? {
+        return AesEncryption.decrypt(payload, ivParameterSpec).getOrNull()
+    }
+
     fun payloadToHex(): HexString {
         return HexUtil.toHexString(payload)
     }
