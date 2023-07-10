@@ -74,9 +74,6 @@ class FirebaseExample {
         val word = UnencryptedPassword.of(username = usernameStr)
 
         val original = word.encrypt().decrypt()
-        Assert.assertEquals(original.username.it, "-1")
-
-
-
+        Assert.assertEquals(usernameStr, original.username.value)
     }
 }

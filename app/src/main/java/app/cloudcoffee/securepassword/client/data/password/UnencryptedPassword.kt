@@ -2,13 +2,11 @@ package app.cloudcoffee.securepassword.client.data.password
 
 import app.cloudcoffee.securepassword.framework.NULL_STRING
 import app.cloudcoffee.securepassword.security.aes.AesEncryption
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.launch
 
-data class Email(val it: String)
-data class Username(val it: String)
-data class Password(val it: String)
-data class Note(val it: String)
+data class Email(val value: String)
+data class Username(val value: String)
+data class Password(val value: String)
+data class Note(val value: String)
 
 class UnencryptedPassword(val username: Username,
                           val password: Password,
@@ -18,10 +16,10 @@ class UnencryptedPassword(val username: Username,
     fun encrypt(): EncryptedPassword {
         val usingIv = AesEncryption.getNextStrongIv()
 
-        val encryptUsername = AesEncryption.encryptUtf8(username.it)
-        val encryptPassword = AesEncryption.encryptUtf8(password.it)
-        val encryptEmail = AesEncryption.encryptUtf8(email.it)
-        val encryptNote = AesEncryption.encryptUtf8(note.it)
+        val encryptUsername = AesEncryption.encryptUtf8(username.value)
+        val encryptPassword = AesEncryption.encryptUtf8(password.value)
+        val encryptEmail = AesEncryption.encryptUtf8(email.value)
+        val encryptNote = AesEncryption.encryptUtf8(note.value)
 
         return EncryptedPassword(
             usingIv,

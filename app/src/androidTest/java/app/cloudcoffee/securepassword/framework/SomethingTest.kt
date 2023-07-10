@@ -12,7 +12,7 @@ class SomethingTest {
     fun testNullString() {
         val nullString: String? = null
         val pop  = Maybe.value(nullString)
-        Assert.assertTrue(pop is Maybe.Failed)
+        Assert.assertTrue(pop is Maybe.Null)
     }
 
     @Test
@@ -27,7 +27,7 @@ class SomethingTest {
         val nullString: String? = null
         val someString  = Maybe.value(nullString)
         val stringLength = getCharLength(someString)
-        Assert.assertTrue(stringLength is Maybe.Failed)
+        Assert.assertTrue(stringLength is Maybe.Null)
     }
     @Test
     fun stringLength() {
