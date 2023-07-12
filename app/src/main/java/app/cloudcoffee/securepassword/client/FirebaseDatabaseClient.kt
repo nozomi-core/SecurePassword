@@ -38,6 +38,18 @@ class FirebaseDatabaseClient: DatabaseClient {
         }
     }
 
+    override suspend fun whereAny(collection: ObjectCollection): Maybe<QueryResponse> {
+        return suspendCoroutine { continuation ->
+            firestore.collection(collection.path).get().addOnSuccessListener {
+                continuation.resume(Maybe.value(FirebaseQueryResponse(it)))
+            }.addOnFailureListener {
+                continuation.resume(Maybe.fail(it, FailureCode.NETWORK_EXCEPTION))
+            }.addOnCanceledListener {
+                continuation.resume(Maybe.fail(FailureCode.OPERATION_CANCELED))
+            }
+        }
+    }
+
     override suspend fun set(path: ObjectPath, value: Any): Maybe<Unit> {
         return suspendCoroutine { continuation ->
         firestore.document(path.fullPath).set(value).addOnSuccessListener {

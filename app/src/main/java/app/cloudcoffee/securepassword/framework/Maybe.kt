@@ -28,6 +28,13 @@ sealed class Maybe<out T> {
         }
     }
 
+    fun toUnit(): Maybe<Unit> {
+        return when(this) {
+            is Value -> value(Unit)
+            else -> fail(FailureCode.SOMETHING_MAPPING)
+        }
+    }
+
     fun onValue(onValue: (myVal: T) -> Unit): Maybe<T> {
         when(this) {
             is Value -> onValue(theValue)
@@ -58,6 +65,20 @@ sealed class Maybe<out T> {
     }
 
     fun <R> transform(mapper: (myVal: T) -> R): Maybe<R> {
+        return when(this) {
+            is Value -> {
+                try {
+                    value(mapper(theValue))
+                } catch (e: Throwable) {
+                    fail(e, FailureCode.SOMETHING_MAPPING)
+                }
+            }
+            is Failed -> this
+            is Null -> this
+        }
+    }
+
+    suspend fun <R> transformSuspend(mapper: suspend (myVal: T) -> R): Maybe<R> {
         return when(this) {
             is Value -> {
                 try {

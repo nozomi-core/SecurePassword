@@ -1,7 +1,9 @@
 package app.cloudcoffee.securepassword.client.data.password
 
+import app.cloudcoffee.securepassword.framework.Maybe
 import app.cloudcoffee.securepassword.framework.NULL_STRING
 import app.cloudcoffee.securepassword.security.aes.AesEncryption
+import kotlinx.serialization.json.Json
 
 data class Email(val value: String)
 data class Username(val value: String)
@@ -13,20 +15,14 @@ class UnencryptedPassword(val username: Username,
                           val email: Email,
                           val note: Note) {
 
-    fun encrypt(): EncryptedPassword {
-        val usingIv = AesEncryption.getNextStrongIv()
+    fun encrypt(): Maybe<EncryptedPassword> {
+        val format = PasswordMapper.toFormat(this)
+        val jsonString = Json.encodeToString(PasswordFormat.serializer(), format)
+        val encryptedPassword = AesEncryption.encryptUtf8(jsonString)
 
-        val encryptUsername = AesEncryption.encryptUtf8(username.value)
-        val encryptPassword = AesEncryption.encryptUtf8(password.value)
-        val encryptEmail = AesEncryption.encryptUtf8(email.value)
-        val encryptNote = AesEncryption.encryptUtf8(note.value)
-
-        return EncryptedPassword(
-            usingIv,
-            encryptUsername.getOrNull(),
-            encryptPassword.getOrNull(),
-            encryptEmail.getOrNull(),
-            encryptNote.getOrNull())
+        return encryptedPassword.transform { result ->
+            EncryptedPassword(result.ivParameterSpec, result.payload)
+        }
     }
 
     companion object {

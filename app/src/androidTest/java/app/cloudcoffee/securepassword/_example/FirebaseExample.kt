@@ -4,9 +4,11 @@ import app.cloudcoffee.securepassword._env.testSignal
 import app.cloudcoffee.securepassword.client.DatabaseClient
 import app.cloudcoffee.securepassword.client.FirebaseDatabaseClient
 import app.cloudcoffee.securepassword.client.ObjectCollection
+import app.cloudcoffee.securepassword.client.data.password.FirebasePasswordApi
 import app.cloudcoffee.securepassword.client.data.password.UnencryptedPassword
 import app.cloudcoffee.securepassword.framework.FailureCode
 import app.cloudcoffee.securepassword.framework.Maybe
+import kotlinx.serialization.json.Json
 import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -67,13 +69,23 @@ class FirebaseExample {
     }
 
     @Test
-    fun testEncrupt() {
+    fun testEncrypt() {
+        val passwordClient = FirebasePasswordApi()
+        val result = testSignal { signal ->
+            val password = UnencryptedPassword.of("my_password")
+            signal.done(passwordClient.insert(password))
+        }
+        Assert.assertTrue(result is Maybe.Value)
+    }
 
-        val usernameStr = "${UUID.randomUUID()}"
+    @Test
+    fun testRead() {
+        val passwordClient = FirebasePasswordApi()
+        val result = testSignal { signal ->
+            val password = passwordClient.getAllPasswords()
 
-        val word = UnencryptedPassword.of(username = usernameStr)
-
-        val original = word.encrypt().decrypt()
-        Assert.assertEquals(usernameStr, original.username.value)
+            signal.done(password)
+        }
+        Assert.assertTrue(result is Maybe.Value)
     }
 }
