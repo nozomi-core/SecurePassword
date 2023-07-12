@@ -6,7 +6,6 @@ import kotlinx.coroutines.launch
 import java.util.concurrent.CompletableFuture
 
 class TestSignal<T>(private val future: CompletableFuture<T>) {
-
     fun done(result: T) {
         future.complete(result)
     }
