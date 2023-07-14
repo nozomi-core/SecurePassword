@@ -1,14 +1,10 @@
 package app.cloudcoffee.securepassword.client.data.password
 
+import app.cloudcoffee.securepassword.extensions.santize
 import app.cloudcoffee.securepassword.framework.Maybe
 import app.cloudcoffee.securepassword.framework.NULL_STRING
 import app.cloudcoffee.securepassword.security.aes.AesEncryption
 import kotlinx.serialization.json.Json
-
-data class Email(val value: String)
-data class Username(val value: String)
-data class Password(val value: String)
-data class Note(val value: String)
 
 class UnencryptedPassword(val username: Username,
                           val password: Password,
@@ -27,16 +23,16 @@ class UnencryptedPassword(val username: Username,
 
     companion object {
 
-        fun of(username: String? = NULL_STRING,
-               password: String? = NULL_STRING,
-               email: String? = NULL_STRING,
-               note: String? = NULL_STRING): UnencryptedPassword {
+        fun of(username: String? = null,
+               password: String? = null,
+               email: String? = null,
+               note: String? = null): UnencryptedPassword {
 
             return UnencryptedPassword(
-                Username(username ?: NULL_STRING),
-                Password(password ?: NULL_STRING),
-                Email(email ?: NULL_STRING),
-                Note(note ?: NULL_STRING))
+                Username(username.santize()),
+                Password(password.santize()),
+                Email(email.santize()),
+                Note(note.santize()))
         }
     }
 }
