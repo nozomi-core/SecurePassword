@@ -1,7 +1,9 @@
 package app.cloudcoffee.securepassword.example
 
+import app.cloudcoffee.securepassword.client.data.password.Note
 import app.cloudcoffee.securepassword.framework.FailureCode
 import app.cloudcoffee.securepassword.framework.Maybe
+import app.cloudcoffee.securepassword.framework.isValue
 
 class MyUseCase private constructor(
     val name: Maybe<String>,
@@ -18,6 +20,8 @@ class MyUseCase private constructor(
 class DomainExample {
 
     fun testThis() {
+        val someNote = Note("hello there")
+        someNote.isValue("pop")
 
         MyUseCase.of("popcorn").name.getOrNull()
 

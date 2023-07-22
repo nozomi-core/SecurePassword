@@ -3,7 +3,6 @@ package app.cloudcoffee.securepassword.client.data.password
 import app.cloudcoffee.securepassword.framework.Maybe
 import app.cloudcoffee.securepassword.helper.hex.HexString
 import app.cloudcoffee.securepassword.helper.hex.HexUtil
-import app.cloudcoffee.securepassword.security.aes.AesEncryptResult
 import app.cloudcoffee.securepassword.security.aes.AesEncryption
 import kotlinx.serialization.json.Json
 import javax.crypto.spec.IvParameterSpec

@@ -2,7 +2,7 @@ package app.cloudcoffee.securepassword.client.data.password
 
 import app.cloudcoffee.securepassword.framework.Maybe
 
-class PasswordList(private val list: List<UnencryptedPassword>) {
+class PasswordList(val list: List<UnencryptedPassword>) {
 
     fun whereEmail(email: String) {
 
