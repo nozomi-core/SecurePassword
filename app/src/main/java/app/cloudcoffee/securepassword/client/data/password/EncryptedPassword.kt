@@ -18,6 +18,4 @@ class EncryptedPassword(val ivParameterSpec: IvParameterSpec, val encoded: ByteA
 
     fun convertIvToHex(): HexString = HexUtil.toHexString(ivParameterSpec.iv)
     fun convertPasswordToHex(): HexString = HexUtil.toHexString(encoded)
-
-
 }

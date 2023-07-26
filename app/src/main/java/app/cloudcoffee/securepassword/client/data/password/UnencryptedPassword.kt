@@ -2,7 +2,6 @@ package app.cloudcoffee.securepassword.client.data.password
 
 import app.cloudcoffee.securepassword.extensions.santize
 import app.cloudcoffee.securepassword.framework.Maybe
-import app.cloudcoffee.securepassword.framework.NULL_STRING
 import app.cloudcoffee.securepassword.security.aes.AesEncryption
 import kotlinx.serialization.json.Json
 

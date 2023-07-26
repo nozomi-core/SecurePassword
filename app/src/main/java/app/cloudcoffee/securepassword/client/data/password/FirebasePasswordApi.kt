@@ -2,6 +2,7 @@ package app.cloudcoffee.securepassword.client.data.password
 
 import app.cloudcoffee.securepassword.client.DatabaseClient
 import app.cloudcoffee.securepassword.client.ObjectCollection
+import app.cloudcoffee.securepassword.client.VirtualPointer
 import app.cloudcoffee.securepassword.framework.Maybe
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -32,12 +33,14 @@ class FirebasePasswordApi: PasswordApi, KoinComponent {
     override suspend fun getAllPasswords(): Maybe<PasswordList> {
         return client.whereAny(PASSWORD_PATH).transformSuspend { response ->
             val listPasswords = response.convertResponse(PasswordDTO::class.java)
-            val mapped = listPasswords.map { pointer ->
-                pointer.map {
-                    PasswordMapper.toUnencrypted(it)
+
+            val mappedPointers: MutableList<VirtualPointer<UnencryptedPassword>> = mutableListOf()
+            listPasswords.forEach { pointer ->
+                pointer.map { PasswordMapper.toUnencrypted(it) }.value.onValue { password ->
+                    mappedPointers.add(pointer.copyInto(password))
                 }
             }
-            PasswordList.fromMaybes(mapped)
+            PasswordList(mappedPointers)
         }
     }
 }

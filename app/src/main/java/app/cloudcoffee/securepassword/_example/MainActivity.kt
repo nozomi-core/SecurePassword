@@ -14,6 +14,7 @@ import app.cloudcoffee.securepassword.screen.initExampleApplication
 import java.time.Clock
 
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
@@ -30,7 +31,7 @@ class MainActivity : ComponentActivity() {
             val myTime = ClientTime.serverUTC
             val time = Clock.systemUTC().millis()
             val myMillis = System.currentTimeMillis()
-              val gnnsTime = SystemClock.currentGnssTimeClock().millis()
+            val gnnsTime = SystemClock.currentGnssTimeClock().millis()
         }
     }
 }
