@@ -20,8 +20,11 @@ class DisplayPasswordViewModel: ViewModel(), KoinComponent {
     val passwordState: State<PasswordList?> get() = _passwordState
 
     init {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             val result = passwordApi.getAllPasswords()
+            result.onValue {
+                it.orderByTitleDesc()
+            }
 
             withContext(Dispatchers.Main) {
                 _passwordState.value = result.getOrNull()

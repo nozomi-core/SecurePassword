@@ -12,10 +12,13 @@ object PasswordMapper {
     private val jsonBuilder = Json {
         isLenient = true
         ignoreUnknownKeys = true
+        explicitNulls = false
+
     }
 
     fun toFormat(model: UnencryptedPassword): PasswordFormat {
         return PasswordFormat(
+            title = model.title.value,
             username = model.username.value,
             password = model.password.value,
             email = model.email.value,
@@ -25,6 +28,7 @@ object PasswordMapper {
 
     fun toPassword(format: PasswordFormat): UnencryptedPassword {
         return UnencryptedPassword.of(
+            title = format.title,
             username = format.username,
             password = format.password,
             email = format.email,

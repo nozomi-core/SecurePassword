@@ -6,7 +6,8 @@ import app.cloudcoffee.securepassword.framework.NULL_STRING
 import app.cloudcoffee.securepassword.security.aes.AesEncryption
 import kotlinx.serialization.json.Json
 
-class UnencryptedPassword(val username: Username,
+class UnencryptedPassword(val title: Title,
+                          val username: Username,
                           val password: Password,
                           val email: Email,
                           val note: Note) {
@@ -23,12 +24,14 @@ class UnencryptedPassword(val username: Username,
 
     companion object {
 
-        fun of(username: String? = null,
+        fun of(title: String? = null,
+               username: String? = null,
                password: String? = null,
                email: String? = null,
                note: String? = null): UnencryptedPassword {
 
             return UnencryptedPassword(
+                Title(title.santize()),
                 Username(username.santize()),
                 Password(password.santize()),
                 Email(email.santize()),

@@ -11,7 +11,7 @@ android {
 
     defaultConfig {
         applicationId "app.cloudcoffee.securepassword"
-        minSdk 26
+        minSdk 29
         targetSdk 33
         versionCode 1
         versionName "1.0"
@@ -75,6 +75,7 @@ dependencies {
     implementation 'androidx.compose.ui:ui-graphics'
     implementation 'androidx.compose.ui:ui-tooling-preview'
     implementation 'androidx.compose.material3:material3'
+    implementation 'androidx.compose.runtime:runtime-livedata'
 
     //Compose Navigation
     implementation "androidx.navigation:navigation-compose:$nav_version"

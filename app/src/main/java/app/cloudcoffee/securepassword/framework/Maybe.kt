@@ -106,6 +106,20 @@ sealed class Maybe<out T> {
         }
     }
 
+    suspend fun <R> thenSuspend(mapper: suspend (T) -> Maybe<R>): Maybe<R> {
+        return when (this) {
+            is Value -> {
+                try {
+                    mapper(theValue)
+                } catch (e: Throwable) {
+                    fail(e, FailureCode.SOMETHING_MAPPING)
+                }
+            }
+            is Failed -> this
+            is Null -> this
+        }
+    }
+
     companion object {
 
         fun <T> value (aValue: T?): Maybe<T> {

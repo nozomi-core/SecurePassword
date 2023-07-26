@@ -6,7 +6,7 @@ import app.cloudcoffee.securepassword.framework.Maybe
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 
-private val PASSWORD_PATH = ObjectCollection("app/secure-password/_exam")
+private val PASSWORD_PATH = ObjectCollection("app/secure-password/passwords")
 
 class FirebasePasswordApi: PasswordApi, KoinComponent {
     private val client: DatabaseClient by inject()
@@ -17,7 +17,8 @@ class FirebasePasswordApi: PasswordApi, KoinComponent {
 
         val dto = PasswordDTO(
             password = hexPassword.encodedHex,
-            iv = hexIv.encodedHex)
+            iv = hexIv.encodedHex,
+            createdAt = System.currentTimeMillis())
 
         return client.insert(PASSWORD_PATH, dto).toUnit()
     }
@@ -31,8 +32,11 @@ class FirebasePasswordApi: PasswordApi, KoinComponent {
     override suspend fun getAllPasswords(): Maybe<PasswordList> {
         return client.whereAny(PASSWORD_PATH).transformSuspend { response ->
             val listPasswords = response.convertResponse(PasswordDTO::class.java)
-            val mapped = listPasswords.map { PasswordMapper.toUnencrypted(it) }
-
+            val mapped = listPasswords.map { pointer ->
+                pointer.map {
+                    PasswordMapper.toUnencrypted(it)
+                }
+            }
             PasswordList.fromMaybes(mapped)
         }
     }

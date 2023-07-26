@@ -8,7 +8,8 @@ data class PasswordDTO(
     @SerialName("password")
     val password: String?,
     @SerialName("iv_16")
-    val iv: String?) {
+    val iv: String?,
+    val createdAt: Long?) {
 
-    constructor(): this(null, null)
+    constructor(): this(null, null, null)
 }

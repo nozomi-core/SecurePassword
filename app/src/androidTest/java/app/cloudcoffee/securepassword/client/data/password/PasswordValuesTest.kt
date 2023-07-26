@@ -13,9 +13,4 @@ class PasswordValuesTest {
         val email = Email("email")
         Assert.assertEquals(Email("email"), email)
     }
-
-
-    fun testNulls(name: String?) {
-
-    }
 }

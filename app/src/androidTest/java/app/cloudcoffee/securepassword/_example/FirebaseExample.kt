@@ -4,6 +4,7 @@ import app.cloudcoffee.securepassword._env.testSignal
 import app.cloudcoffee.securepassword.client.DatabaseClient
 import app.cloudcoffee.securepassword.client.FirebaseDatabaseClient
 import app.cloudcoffee.securepassword.client.ObjectCollection
+import app.cloudcoffee.securepassword.client.clock.FirebaseClockApi
 import app.cloudcoffee.securepassword.client.data.password.FirebasePasswordApi
 import app.cloudcoffee.securepassword.client.data.password.UnencryptedPassword
 import app.cloudcoffee.securepassword.framework.FailureCode
@@ -87,5 +88,16 @@ class FirebaseExample {
             signal.done(password)
         }
         Assert.assertTrue(result is Maybe.Value)
+    }
+
+    @Test
+    fun testPing() {
+        val client = FirebaseClockApi()
+        val result = testSignal { signal ->
+            client.pingServerForTime()
+
+            signal.done("")
+        }
+        Assert.assertTrue(result == "")
     }
 }

@@ -46,6 +46,7 @@ class ExampleViewModel: ViewModel() {
             flow.collect {
 
             }
+
         }
 
         val someFlow = MutableSharedFlow<String>()

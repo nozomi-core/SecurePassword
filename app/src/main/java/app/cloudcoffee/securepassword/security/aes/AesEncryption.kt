@@ -43,9 +43,12 @@ object AesEncryption {
             }.build()
 
             keyGenerator.init(keyGenParameterSpec)
+            val newKey = keyGenerator.generateKey()
 
-            val keyEntry = keyStore.getEntry(KEY_ALIAS, null) as KeyStore.SecretKeyEntry
-            return keyEntry.secretKey
+            return newKey
+
+            //val keyEntry = keyStore.getEntry(KEY_ALIAS, null) as KeyStore.SecretKeyEntry
+           // return keyEntry.secretKey
 
         } catch (e: Throwable) {
             e.printStackTrace()
