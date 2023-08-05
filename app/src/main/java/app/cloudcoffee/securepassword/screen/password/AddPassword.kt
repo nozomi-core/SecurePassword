@@ -39,7 +39,7 @@ fun AddPasswordScreen(screenContext: ScreenContext? = null) {
     val email = remember { mutableStateOf("") }
     val note = remember { mutableStateOf("") }
 
-    Column {
+    Column(modifier = Modifier.background(Color.White)) {
         PasswordInput(name = "Title", state = title)
         PasswordInput(name = "Username", state = username)
         PasswordInput(name = "Password", state = password)
