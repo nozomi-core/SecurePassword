@@ -3,7 +3,7 @@ package app.cloudcoffee.securepassword.client
 interface VirtualPointer<T> {
     val value: T
     fun <R> map(mapper: (input: T) -> R): VirtualPointer<R>
-    fun <R> copyInto(another: R): VirtualPointer<R>
+    fun <R> copyWith(another: R): VirtualPointer<R>
 }
 
 abstract class QueryResponse {

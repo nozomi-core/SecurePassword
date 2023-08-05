@@ -17,7 +17,9 @@ private val DISPLAY_PASSWORD = "display-password"
 
 fun initExampleApplication(builder: NavGraphBuilder,
                         controller: NavController) {
-    val screenContext = ScreenContext(UINavigation(controller))
+    val screenContext = ScreenContext(
+        UINavigation(controller),
+        SharedAppState())
     builder.buildExampleRoutes(screenContext)
 }
 
@@ -26,7 +28,7 @@ fun NavGraphBuilder.buildExampleRoutes(screenContext: ScreenContext) {
     composable(LOGIN_SCREEN) { LoginScreen(screenContext) }
     composable(PASSWORD_SCREEN) { PasswordScreen(screenContext) }
     composable(ADD_PASSWORD_SCREEN) { AddPasswordScreen(screenContext) }
-    composable(DISPLAY_PASSWORD) { DisplayPassword() }
+    composable(DISPLAY_PASSWORD) { DisplayPassword(screenContext) }
 }
 
 class UINavigation(val controller: NavController) {

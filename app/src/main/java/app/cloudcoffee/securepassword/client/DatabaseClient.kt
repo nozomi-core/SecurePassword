@@ -11,4 +11,5 @@ interface DatabaseClient {
     suspend fun whereEqualTo(collection: ObjectCollection, key: String, value: Any): Maybe<QueryResponse>
     suspend fun whereAny(collection: ObjectCollection): Maybe<QueryResponse>
     suspend fun set(path: ObjectPath, value: Any): Maybe<Unit>
+    suspend fun delete(path: ObjectPath): Maybe<Unit>
 }

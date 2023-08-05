@@ -1,4 +1,4 @@
-package app.cloudcoffee.securepassword._example.theme
+package app.cloudcoffee.securepassword.theme
 
 import android.app.Activity
 import android.os.Build

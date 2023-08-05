@@ -1,8 +1,10 @@
 package app.cloudcoffee.securepassword.client.data.password
 
 import app.cloudcoffee.securepassword.client.DatabaseClient
+import app.cloudcoffee.securepassword.client.FirebaseVirtualPointer
 import app.cloudcoffee.securepassword.client.ObjectCollection
 import app.cloudcoffee.securepassword.client.VirtualPointer
+import app.cloudcoffee.securepassword.framework.FailureCode
 import app.cloudcoffee.securepassword.framework.Maybe
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
@@ -36,11 +38,20 @@ class FirebasePasswordApi: PasswordApi, KoinComponent {
 
             val mappedPointers: MutableList<VirtualPointer<UnencryptedPassword>> = mutableListOf()
             listPasswords.forEach { pointer ->
+
+                //Map an encrypted pointer to plain text password, if success add it result list
                 pointer.map { PasswordMapper.toUnencrypted(it) }.value.onValue { password ->
-                    mappedPointers.add(pointer.copyInto(password))
+                    mappedPointers.add(pointer.copyWith(password))
                 }
             }
             PasswordList(mappedPointers)
+        }
+    }
+
+    override suspend fun delete(pointer: VirtualPointer<UnencryptedPassword>): Maybe<Unit> {
+        return when(pointer) {
+            is FirebaseVirtualPointer -> client.delete(pointer.toObjectPath())
+            else -> Maybe.fail(FailureCode.DOMAIN_ERROR)
         }
     }
 }

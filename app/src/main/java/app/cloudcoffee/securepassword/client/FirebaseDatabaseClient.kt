@@ -10,7 +10,8 @@ class FirebaseDatabaseClient: DatabaseClient {
 
     private val firestore = FirebaseFirestore.getInstance()
 
-    override suspend fun insert(collection: ObjectCollection, value: Any): Maybe<ObjectResponse> {
+    override suspend fun insert(collection: ObjectCollection,
+                                value: Any): Maybe<ObjectResponse> {
         return suspendCoroutine { continuation ->
             firestore.collection(collection.path).add(value).addOnSuccessListener { reference ->
                 continuation.resume(Maybe.value(ObjectResponse(ObjectPath(reference.path))))
@@ -53,6 +54,18 @@ class FirebaseDatabaseClient: DatabaseClient {
     override suspend fun set(path: ObjectPath, value: Any): Maybe<Unit> {
         return suspendCoroutine { continuation ->
         firestore.document(path.fullPath).set(value).addOnSuccessListener {
+                continuation.resume(Maybe.value(Unit))
+            }.addOnFailureListener {
+                continuation.resume(Maybe.fail(it, FailureCode.NETWORK_EXCEPTION))
+            }.addOnCanceledListener {
+                continuation.resume(Maybe.fail(FailureCode.OPERATION_CANCELED))
+            }
+        }
+    }
+
+    override suspend fun delete(path: ObjectPath): Maybe<Unit> {
+        return suspendCoroutine { continuation ->
+            firestore.document(path.fullPath).delete().addOnSuccessListener {
                 continuation.resume(Maybe.value(Unit))
             }.addOnFailureListener {
                 continuation.resume(Maybe.fail(it, FailureCode.NETWORK_EXCEPTION))

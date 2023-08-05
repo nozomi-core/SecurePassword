@@ -9,9 +9,11 @@ class FirebaseVirtualPointer<T> private constructor(val documentPath: String, ov
         return FirebaseVirtualPointer(documentPath, mappedValue)
     }
 
-    override fun <R> copyInto(another: R): VirtualPointer<R> {
+    override fun <R> copyWith(another: R): VirtualPointer<R> {
         return FirebaseVirtualPointer(documentPath, another)
     }
+
+    fun toObjectPath() = ObjectPath(documentPath)
 
     companion object {
         fun <T> of(snapshot: DocumentSnapshot, clazz: Class<T>): FirebaseVirtualPointer<T>? {
