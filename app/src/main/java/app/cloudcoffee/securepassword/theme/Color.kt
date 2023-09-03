@@ -17,4 +17,9 @@ val Purple40 = Color(0xFF6650a4)
 val PurpleGrey40 = Color(0xFF625b71)
 val Pink40 = Color(0xFF7D5260)
 
+val Retro1 = Color(0xFFF11A7B)
+val Retro2 = Color(0xFFA084E8)
+val Retro3 = Color(0xFFF11A7B)
+val Retro4 = Color(0xFF2c2f33)
+
 

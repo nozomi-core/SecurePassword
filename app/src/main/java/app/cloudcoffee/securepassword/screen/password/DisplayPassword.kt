@@ -3,6 +3,7 @@ package app.cloudcoffee.securepassword.screen.password
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,6 +35,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import app.cloudcoffee.securepassword.screen.ScreenContext
 import app.cloudcoffee.securepassword.theme.DiscordBlue
 import app.cloudcoffee.securepassword.theme.Purple80
+import app.cloudcoffee.securepassword.theme.Retro3
 
 private const val ENCODE_SECRET = "Boulos#187"
 
@@ -45,7 +47,8 @@ fun DisplayPassword(screenContext: ScreenContext) {
 
     val showPasswords = remember { encodeState == ENCODE_SECRET }
 
-    Column(Modifier.verticalScroll(rememberScrollState())) {
+    Column( Modifier.verticalScroll(rememberScrollState()).padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(16.dp)) {
         passwordViewModel.passwordState.value?.let { passwordList ->
             passwordList.list.forEach { pointer ->
                 //PasswordList item states
@@ -57,12 +60,13 @@ fun DisplayPassword(screenContext: ScreenContext) {
                     .clickable {
                         showMenu = !showMenu
                     }
-                    .padding(5.dp)
-                    .clip(RoundedCornerShape(8.dp))
-                    .background(DiscordBlue)
+                    .clip(RoundedCornerShape( 16.dp))
+                    .background(Retro3)
                     .padding(16.dp)) {
-                    Column {
-                        Text(text = model.title.value, color = Color.White, fontSize = 24.sp)
+                    Column (verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                        Text(text = model.title.value,
+                            color = Color.White,
+                            fontSize = 24.sp)
                         Divider()
                         Text(text = model.username.value,color = Color.White)
                         if(showPasswords)

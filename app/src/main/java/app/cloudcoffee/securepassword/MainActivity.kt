@@ -11,13 +11,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
-import app.cloudcoffee.securepassword.PasswordApplication
-import app.cloudcoffee.securepassword.client.clock.ClientTime
 import app.cloudcoffee.securepassword.screen.UINavigation
 import app.cloudcoffee.securepassword.screen.initExampleApplication
-import app.cloudcoffee.securepassword.theme.DiscordBlack20
-import app.cloudcoffee.securepassword.theme.DiscordBlack40
-import java.time.Clock
+import app.cloudcoffee.securepassword.theme.Retro3
+import app.cloudcoffee.securepassword.theme.Retro4
 
 class MainActivity : ComponentActivity() {
 
@@ -25,7 +22,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MaterialTheme {
-                Surface(color = DiscordBlack20,
+                Surface(color = Retro4,
                     modifier = Modifier.fillMaxWidth()
                     .fillMaxHeight()) {
                     val navController = rememberNavController()
@@ -34,14 +31,6 @@ class MainActivity : ComponentActivity() {
                     }
                 }
             }
-        }
-
-        val application = applicationContext as PasswordApplication
-        application.onApplicationReady {
-            val myTime = ClientTime.serverUTC
-            val time = Clock.systemUTC().millis()
-            val myMillis = System.currentTimeMillis()
-            val gnnsTime = SystemClock.currentGnssTimeClock().millis()
         }
     }
 }
