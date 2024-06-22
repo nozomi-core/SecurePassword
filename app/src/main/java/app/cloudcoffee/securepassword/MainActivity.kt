@@ -1,7 +1,6 @@
 package app.cloudcoffee.securepassword
 
 import android.os.Bundle
-import android.os.SystemClock
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -13,20 +12,24 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import app.cloudcoffee.securepassword.screen.UINavigation
 import app.cloudcoffee.securepassword.screen.initExampleApplication
-import app.cloudcoffee.securepassword.theme.Retro3
-import app.cloudcoffee.securepassword.theme.Retro4
+import app.cloudcoffee.securepassword.theme.LocalTheme
 
 class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         setContent {
             MaterialTheme {
-                Surface(color = Retro4,
+                Surface(
+                    color = LocalTheme.current.main,
                     modifier = Modifier.fillMaxWidth()
-                    .fillMaxHeight()) {
+                    .fillMaxHeight()
+                ) {
                     val navController = rememberNavController()
-                    NavHost(navController = navController , startDestination = UINavigation.START_NAVIGATION) {
+                    NavHost(navController = navController ,
+                        startDestination = UINavigation.NAVIGATION_SCREEN
+                    ) {
                         initExampleApplication(this, navController)
                     }
                 }

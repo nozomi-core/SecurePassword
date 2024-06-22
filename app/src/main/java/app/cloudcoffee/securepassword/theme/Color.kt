@@ -1,25 +1,15 @@
 package app.cloudcoffee.securepassword.theme
 
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.ui.graphics.Color
 
-val DiscordBlue = Color(0xFF7289da)
-val DiscordBlack10 = Color(0xFF424549)
-val DiscordBlack20 = Color(0xFF36393e)
-val DiscordBlack30 = Color(0xFF282b30)
-val DiscordBlack40 = Color(0xFF1e2124)
+object AppColor {
+    val Retro1 = Color(0xFFF11A7B)
 
-val Purple80 = Color(0xFFD0BCFF)
-val PurpleGrey80 = Color(0xFFCCC2DC)
-val Pink80 = Color(0xFFEFB8C8)
+    val Blue = Color(0xFF41436A)
+    val Red = Color(0xFF984063)
+    val RedLight = Color(0xFFF64668)
+    val Orange = Color(0xFFFE9677)
 
-val Purple40 = Color(0xFF6650a4)
-val PurpleGrey40 = Color(0xFF625b71)
-val Pink40 = Color(0xFF7D5260)
-
-val Retro1 = Color(0xFFF11A7B)
-val Retro2 = Color(0xFFA084E8)
-val Retro3 = Color(0xFFF11A7B)
-val Retro4 = Color(0xFF2c2f33)
-
+    val SCREEN_BACKGROUND = Blue
+}
 
